@@ -18,7 +18,6 @@ from pymatgen.core.composition import Composition
 
 from matdeeplearn.common.ase_utils import MDLCalculator
 
-from llmatdesign.prompts.internal_ask import *
 from llmatdesign.modules.structure_optimization import StructureOptimizer
 
 class Agent:

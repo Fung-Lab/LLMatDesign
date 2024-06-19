@@ -14,27 +14,32 @@ class AskLLM:
     def __init__(
         self, 
         llm_model, 
-        gpt_organization=None, 
-        google_api_key=None
+        api_key=None,
+        openai_organization=None, 
     ) -> None:
         self.llm_model = llm_model
-        if self.llm_model.startswith('gpt'):
 
-            if gpt_organization is not None:
-                self.client = openai.OpenAI(organization=gpt_organization)
+        if self.llm_model.startswith('gpt'):
+            api_key = api_key if api_key is not None else os.environ.get('OPENAI_API_KEY')
+
+            if openai_organization is not None:
+                self.client = openai.OpenAI(
+                    organization=openai_organization,
+                    api_key=api_key
+                )
             else:
-                self.client = openai.OpenAI()
+                self.client = openai.OpenAI(api_key=api_key)
 
             self.model_name = self.get_openai_model_name()
             
         elif self.llm_model.startswith('gemini'):
 
-            self.google_api_key = google_api_key if google_api_key is not None else os.environ.get('GOOGLE_API_KEY')
+            api_key = api_key if api_key is not None else os.environ.get('GOOGLE_API_KEY')
 
-            if self.google_api_key is None:
+            if api_key is None:
                 raise ValueError('Please provide a valid Google API key.')
             
-            genai.configure(api_key=self.google_api_key)
+            genai.configure(api_key=api_key)
             self.model_name = self.get_gemini_model_name()
         else:
             raise ValueError('Supported models are GPT and Gemini LLM models.')
