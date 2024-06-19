@@ -1,0 +1,54 @@
+task:
+  # Path to the checkpoint.pt file. The model used in the calculator will load parameters from this file.
+  checkpoint_path: ../checkpoints/matdeeplearn/force_field/best_checkpoint.pt
+
+model:
+  name: torchmd_etEarly
+  # model attributes
+  hidden_channels: 128
+  num_layers: 8
+  num_rbf: 50
+  activation: "silu"
+  attn_activation: "silu"
+  num_heads: 8
+  num_post_layers: 1
+  post_hidden_channels: 64
+  pool: "global_add_pool"
+  pool_order: "late"
+  aggr: "add"
+  dropout_rate: 0.0
+  # Compute edge indices on the fly in the model forward
+  otf_edge_index: True 
+  # Compute edge attributes on the fly in the model forward
+  otf_edge_attr: True  
+  # Compute node attributes on the fly in the model forward
+  otf_node_attr: False
+  model_ensemble: 1
+  # compute gradients w.r.t to positions and cell, requires otf_edge_attr=True      
+  gradient: True
+
+dataset:  
+  preprocess_params:
+    # one of mdl (minimum image convention), ocp (all neighbors included)
+    edge_calc_method: ocp 
+    # determine if edges are computed, if false, then they need to be computed on the fly   
+    preprocess_edges: False
+    # determine if edge attributes are computed during processing, if false, then they need to be computed on the fly   
+    preprocess_edge_features: False
+    # determine if node attributes are computed during processing, if false, then they need to be computed on the fly   
+    preprocess_node_features: False
+    # distance cutoff to determine if two atoms are connected by an edge
+    cutoff_radius : 8.0
+    # maximum number of neighbors to consider (usually an arbitrarily high number to consider all neighbors)
+    n_neighbors : 250
+    # number of pbc offsets to consider when determining neighbors (usually not changed)
+    num_offsets: 2
+    # dimension of node attributes
+    node_dim : 100
+    # dimension of edge attributes
+    edge_dim : 50
+    # whether or not to add self-loops
+    self_loop: True
+    # Method of obtaining atom dictionary: available: (onehot)
+    node_representation: onehot    
+    all_neighbors: True
