@@ -1,0 +1,5 @@
+ase
+pymatgen
+mp-api
+openai
+google-generativeai
